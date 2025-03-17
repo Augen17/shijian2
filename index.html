@@ -1,57 +1,159 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时5日期时间</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
+            min-height: 100vh;
+            background: white;
+            overflow: hidden;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .clock-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .date-card {
+            background: #f8f8f8;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .date-info {
+            display: flex;
+            justify-content: center;
+            align-items: baseline;
+            gap: 15px;
+        }
+
+        .year-month {
+            font-size: 1.8em;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .day-week {
+            font-size: 2.2em;
             color: #333;
-            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
         }
-        .container {
-            font-size: 2em;
+
+        .time-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .time-box {
+            background: #f0f0f0;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: white;
+            border-radius: 12px;
+            position: relative;
+            perspective: 800px;
         }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #1e1e1e;
-                color: #fff;
-            }
-            .container {
-                background-color: #333;
-                color: #fff;
-            }
+
+        .time-number {
+            font-size: 4em;
+            color: #222;
+            font-weight: 300;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .flip-animation {
+            animation: flip 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes flip {
+            0% { transform: rotateX(0); }
+            50% { transform: rotateX(-90deg); }
+            100% { transform: rotateX(0); }
+        }
+
+        .colon {
+            font-size: 3em;
+            align-self: center;
+            color: #666;
+        }
+
+        .second {
+            color: #e74c3c;
+            font-size: 1.2em;
+            position: absolute;
+            bottom: -25px;
+            right: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="clock"></div>
+    <div class="clock-container">
+        <div class="date-card">
+            <div class="date-info">
+                <div class="year-month"></div>
+                <div class="day-week">
+                    <span class="current-day"></span>
+                    <span class="weekday"></span>
+                </div>
+            </div>
+        </div>
+        <div class="time-container">
+            <div class="time-box hours">
+                <div class="time-number">00</div>
+            </div>
+            <div class="colon">:</div>
+            <div class="time-box minutes">
+                <div class="time-number">00</div>
+            </div>
+            <div class="colon">:</div>
+            <div class="time-box seconds">
+                <div class="time-number">00</div>
+                <div class="second"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        function updateTime() {
+        function updateClock() {
             const now = new Date();
-            const formattedTime = now.toLocaleString('zh-CN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            
+            // 更新日期
+            document.querySelector('.year-month').textContent = `${year}年${month}月`;
+            document.querySelector('.current-day').textContent = `${day}日 `;
+            document.querySelector('.weekday').textContent = weekdays[now.getDay()];
+
+            // 更新时间
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+
+            document.querySelector('.hours .time-number').textContent = hours;
+            document.querySelector('.minutes .time-number').textContent = minutes;
+            document.querySelector('.seconds .time-number').textContent = seconds;
+
+            // 触发动画
+            document.querySelectorAll('.time-number').forEach(el => {
+                el.classList.remove('flip-animation');
+                void el.offsetWidth;
+                el.classList.add('flip-animation');
             });
-            document.getElementById('clock').textContent = formattedTime;
         }
-        setInterval(updateTime, 1000);
-        updateTime();
+
+        updateClock();
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
