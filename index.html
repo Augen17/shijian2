@@ -15,63 +15,56 @@
 
         .clock-container {
             position: relative;
-            perspective: 1000px;
+            perspective: 800px;
+            transform: scale(0.85);
         }
 
         .date-card {
             background: #f8f8f8;
-            padding: 20px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
+            padding: 12px 24px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
         }
 
         .date-info {
             display: flex;
-            justify-content: center;
             align-items: baseline;
-            gap: 15px;
+            gap: 10px;
         }
 
         .year-month {
-            font-size: 1.8em;
+            font-size: 1.2em;
             color: #666;
-            white-space: nowrap;
         }
 
         .day-week {
-            font-size: 2.2em;
+            font-size: 1.4em;
             color: #333;
             font-weight: bold;
-            position: relative;
         }
 
         .time-container {
             display: flex;
-            gap: 15px;
-            justify-content: center;
+            gap: 8px;
         }
 
         .time-box {
             background: #f0f0f0;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 12px;
+            border-radius: 8px;
             position: relative;
-            perspective: 800px;
+            perspective: 600px;
         }
 
         .time-number {
-            font-size: 4em;
+            font-size: 2.8em;
             color: #222;
             font-weight: 300;
-            position: relative;
-            transition: color 0.3s;
         }
 
         .flip-animation {
-            animation: flip 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: flip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes flip {
@@ -81,17 +74,17 @@
         }
 
         .colon {
-            font-size: 3em;
+            font-size: 2em;
             align-self: center;
             color: #666;
         }
 
         .second {
             color: #e74c3c;
-            font-size: 1.2em;
+            font-size: 0.9em;
             position: absolute;
-            bottom: -25px;
-            right: 10px;
+            bottom: -18px;
+            right: 6px;
         }
     </style>
 </head>
@@ -128,12 +121,12 @@
             const year = now.getFullYear();
             const month = (now.getMonth() + 1).toString().padStart(2, '0');
             const day = now.getDate().toString().padStart(2, '0');
-            const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
             
             // 更新日期
             document.querySelector('.year-month').textContent = `${year}年${month}月`;
             document.querySelector('.current-day').textContent = `${day}日 `;
-            document.querySelector('.weekday').textContent = weekdays[now.getDay()];
+            document.querySelector('.weekday').textContent = `周${weekdays[now.getDay()]}`;
 
             // 更新时间
             const hours = now.getHours().toString().padStart(2, '0');
