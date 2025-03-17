@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notion Clock</title>
+    <style>
+    /* 自定义样式 */
+    #notion-clock {
+        font-family: Arial, sans-serif;
+        font-size: 26px;
+        color: #2ea043;  /* Notion品牌绿色 */
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+    .time { font-size: 34px; }
+    </style>
+</head>
+<body>
+    <div id="notion-clock">
+        <div id="date">——</div>
+        <div class="time" id="time">——:——</div>
+    </div>
+
+    <script>
+    // 实时更新函数
+    function updateClock() {
+        const now = new Date();
+        
+        // 日期显示（示例：2024-08-20）
+        const dateStr = now.toLocaleDateString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).replace(/\//g, '-');
+
+        // 时间显示（示例：14:05:09）
+        const timeStr = now.toLocaleTimeString('zh-CN', {
+            hour12: false,
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+
+        document.getElementById("date").textContent = dateStr;
+        document.getElementById("time").textContent = timeStr;
+    }
+
+    // 启动时钟
+    updateClock();
+    setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
