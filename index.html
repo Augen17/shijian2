@@ -1,152 +1,177 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: white;
-            overflow: hidden;
-            font-family: 'Microsoft YaHei', sans-serif;
-        }
+<style>
+/* 保持原有CSS样式不变 */
+body {
+margin: 0;
+display: flex;
+justify-content: flex-start;
+align-items: flex-start;
+min-height: 100vh;
+background: white;
+overflow: hidden;
+font-family: "Microsoft Yahei", sans-serif;
+}
 
-        .clock-container {
-            position: relative;
-            perspective: 800px;
-            transform: scale(0.85);
-        }
+.content-container {
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+gap: 10px;
+width: 260px;
+height: 340px;
+margin-left: 10px;
+}
 
-        .date-card {
-            background: #f8f8f8;
-            padding: 12px 24px;
-            border-radius: 10px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
+.clock-container {
+position: relative;
+perspective: 800px;
+transform: scale(0.7);
+}
 
-        .date-info {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
+.date-card {
+background: #f8f8f8;
+padding: 8px 16px;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+margin-bottom: 10px;
+}
 
-        .year-month {
-            font-size: 1.2em;
-            color: #666;
-        }
+.date-info {
+display: flex;
+align-items: baseline;
+gap: 8px;
+}
 
-        .day-week {
-            font-size: 1.4em;
-            color: #333;
-            font-weight: bold;
-        }
+.year-month {
+font-size: 0.9em;
+color: #666;
+}
 
-        .time-container {
-            display: flex;
-            gap: 8px;
-        }
+.day-week {
+font-size: 1.1em;
+color: #333;
+font-weight: bold;
+}
 
-        .time-box {
-            background: #f0f0f0;
-            padding: 12px;
-            border-radius: 8px;
-            position: relative;
-            perspective: 600px;
-        }
+.time-container {
+display: flex;
+gap: 6px;
+}
 
-        .time-number {
-            font-size: 2.8em;
-            color: #222;
-            font-weight: 300;
-        }
+.time-box {
+background: #f0f0f0;
+padding: 8px;
+border-radius: 6px;
+position: relative;
+perspective: 600px;
+}
 
-        .flip-animation {
-            animation: flip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+.time-number {
+font-size: 2.2em;
+color: #222;
+font-weight: 600;
+}
 
-        @keyframes flip {
-            0% { transform: rotateX(0); }
-            50% { transform: rotateX(-90deg); }
-            100% { transform: rotateX(0); }
-        }
+.flip-animation {
+animation: flip 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        .colon {
-            font-size: 2em;
-            align-self: center;
-            color: #666;
-        }
+@keyframes flip {
+0% { transform: rotateX(0); }
+50% { transform: rotateX(-90deg); }
+100% { transform: rotateX(0); }
+}
 
-        .second {
-            color: #e74c3c;
-            font-size: 0.9em;
-            position: absolute;
-            bottom: -18px;
-            right: 6px;
-        }
-    </style>
+.colon {
+font-size: 1.8em;
+align-self: center;
+color: #666;
+font-weight: 600;
+}
+
+.second {
+color: #e74c3c;
+font-size: 0.7em;
+position: absolute;
+bottom: -14px;
+right: 4px;
+}
+</style>
 </head>
 <body>
-    <div class="clock-container">
-        <div class="date-card">
-            <div class="date-info">
-                <div class="year-month"></div>
-                <div class="day-week">
-                    <span class="current-day"></span>
-                    <span class="weekday"></span>
-                </div>
-            </div>
-        </div>
-        <div class="time-container">
-            <div class="time-box hours">
-                <div class="time-number">00</div>
-            </div>
-            <div class="colon">:</div>
-            <div class="time-box minutes">
-                <div class="time-number">00</div>
-            </div>
-            <div class="colon">:</div>
-            <div class="time-box seconds">
-                <div class="time-number">00</div>
-                <div class="second"></div>
-            </div>
-        </div>
-    </div>
+<div class="content-container">
+<div class="clock-container">
+<div class="date-card">
+<div class="date-info">
+<div class="year-month"></div>
+<div class="day-week">
+<span class="current-day"></span>
+<span class="weekday"></span>
+</div>
+</div>
+</div>
+<div class="time-container">
+<div class="time-box hours">
+<div class="time-number">00</div>
+</div>
+<div class="colon">:</div>
+<div class="time-box minutes">
+<div class="time-number">00</div>
+</div>
+<div class="colon">:</div>
+<div class="time-box seconds">
+<div class="time-number">00</div>
+<div class="second"></div>
+</div>
+</div>
+</div>
+</div>
 
-    <script>
-        function updateClock() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = (now.getMonth() + 1).toString().padStart(2, '0');
-            const day = now.getDate().toString().padStart(2, '0');
-            const weekdays = ["日", "一", "二", "三", "四", "五", "六"];
-            
-            // 更新日期
-            document.querySelector('.year-month').textContent = `${year}年${month}月`;
-            document.querySelector('.current-day').textContent = `${day}日 `;
-            document.querySelector('.weekday').textContent = `周${weekdays[now.getDay()]}`;
+<script>
+function updateTime() {
+    const date = new Date();
+    
+    // 日期部分
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const weekdays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+    
+    // 时间部分
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    
+    // 更新日期显示
+    document.querySelector('.year-month').textContent = `${year}/${month}`;
+    document.querySelector('.current-day').textContent = day;
+    document.querySelector('.weekday').textContent = weekdays[date.getDay()];
+    
+    // 更新时间显示（带翻牌动画）
+    updateWithAnimation('.hours .time-number', hours);
+    updateWithAnimation('.minutes .time-number', minutes);
+    updateWithAnimation('.seconds .time-number', seconds);
+    
+    // 更新秒的小字显示
+    //document.querySelector('.second').textContent = `${seconds} 秒`;
+}
 
-            // 更新时间
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
+function updateWithAnimation(selector, newValue) {
+    const element = document.querySelector(selector);
+    if (element.textContent !== newValue) {
+        element.parentElement.classList.add('flip-animation');
+        setTimeout(() => {
+            element.textContent = newValue;
+            element.parentElement.classList.remove('flip-animation');
+        }, 250);
+    }
+}
 
-            document.querySelector('.hours .time-number').textContent = hours;
-            document.querySelector('.minutes .time-number').textContent = minutes;
-            document.querySelector('.seconds .time-number').textContent = seconds;
-
-            // 触发动画
-            document.querySelectorAll('.time-number').forEach(el => {
-                el.classList.remove('flip-animation');
-                void el.offsetWidth;
-                el.classList.add('flip-animation');
-            });
-        }
-
-        updateClock();
-        setInterval(updateClock, 1000);
-    </script>
+// 每秒更新
+setInterval(updateTime, 1000);
+updateTime(); // 初始化
+</script>
 </body>
 </html>
