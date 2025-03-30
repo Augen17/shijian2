@@ -5,7 +5,7 @@
     <style>
         .container {
             font-family: Arial, sans-serif;
-            max-width: 180px;  /* 进一步缩小容器 */
+            max-width: 230px;  /* 进一步缩小容器 */
             margin: 8px auto; /* 缩小外边距 */
             padding: 6px;      /* 缩小内边距 */
             display: flex;
@@ -14,7 +14,7 @@
         }
         .time-box {
             flex: 1;
-            min-width: 15px;  /* 缩小最小宽度 */
+            min-width: 35px;  /* 缩小最小宽度 */
             padding: 10px;     /* 缩小内边距 */
             background: white;
             border-radius: 2px;/* 缩小圆角 */
@@ -22,33 +22,33 @@
             box-shadow: 0 1px 1px rgba(0,0,0,0.08); /* 减弱阴影 */
         }
         .number {
-            font-size: 1.12em;     /* 缩小数字字号 */
+            font-size: 1.3em;     /* 缩小数字字号 */
             font-weight: bold;
             color: #2c3e50;
             margin: 2px 0;      /* 缩小数字边距 */
         }
         .label {
             color: #7f8c8d;
-            font-size: 0.2em;   /* 缩小标签字号 */
+            font-size: 0.6em;   /* 缩小标签字号 */
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="time-box">
-            <div class="label">今年</div>
+            <div class="label">今年剩余</div>
             <div class="number" id="year-remaining"></div>
             <div class="label">天</div>
         </div>
         
         <div class="time-box">
-            <div class="label">本月</div>
+            <div class="label">本月剩余</div>
             <div class="number" id="month-remaining"></div>
             <div class="label">天</div>
         </div>
         
         <div class="time-box">
-            <div class="label">本周</div>
+            <div class="label">本周剩余</div>
             <div class="number" id="week-remaining"></div>
             <div class="label">天</div>
         </div>
