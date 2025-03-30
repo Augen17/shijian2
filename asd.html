@@ -1,138 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>时间剩余</title>
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
+        .container {
+            font-family: Arial, sans-serif;
+            max-width: 180px;  /* 进一步缩小容器 */
+            margin: 8px auto; /* 缩小外边距 */
+            padding: 6px;      /* 缩小内边距 */
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            overflow: hidden;
-            transform: scale(0.8);
+            gap: 4px;          /* 缩小卡片间隙 */
+            justify-content: flex-start;
         }
-
-        .weather-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+        .time-box {
+            flex: 1;
+            min-width: 15px;  /* 缩小最小宽度 */
+            padding: 10px;     /* 缩小内边距 */
+            background: white;
+            border-radius: 2px;/* 缩小圆角 */
+            text-align: center;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.08); /* 减弱阴影 */
         }
-
-        .location {
-            font-size: 24px;
-            color: #444;
-            margin-bottom: 10px;
+        .number {
+            font-size: 1.12em;     /* 缩小数字字号 */
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 2px 0;      /* 缩小数字边距 */
         }
-
-        .icon {
-            font-size: 120px;
-            line-height: 0.8;
-        }
-
-        .temp {
-            font-size: 60px;
-            font-weight: 300;
-            margin-bottom: 15px;
-        }
-
-        .forecast-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            margin: 8px 0;
-        }
-
-        .forecast-icon {
-            font-size: 40px;
-        }
-
-        .forecast-temp {
-            font-size: 22px;
-            opacity: 0.8;
+        .label {
+            color: #7f8c8d;
+            font-size: 0.2em;   /* 缩小标签字号 */
         }
     </style>
 </head>
 <body>
-    <div class="weather-container">
-        <div class="location">浙江省金华市义乌市</div>
-        <div id="current">
-            <div class="icon"></div>
-            <div class="temp"></div>
+    <div class="container">
+        <div class="time-box">
+            <div class="label">今年</div>
+            <div class="number" id="year-remaining"></div>
+            <div class="label">天</div>
         </div>
-        <div id="forecast"></div>
+        
+        <div class="time-box">
+            <div class="label">本月</div>
+            <div class="number" id="month-remaining"></div>
+            <div class="label">天</div>
+        </div>
+        
+        <div class="time-box">
+            <div class="label">本周</div>
+            <div class="number" id="week-remaining"></div>
+            <div class="label">天</div>
+        </div>
     </div>
 
     <script>
-        // 义乌精确坐标 (北苑街道)
-        const YIWU_COORDS = { 
-            lat: 29.3414, 
-            lng: 120.0762 
-        };
-
-        const WEATHER_ICONS = {
-            'Clear': '☀️',
-            'Clouds': '☁️',
-            'Rain': '🌧️',
-            'Thunderstorm': '⛈️',
-            'Snow': '❄️'
-        };
-
-        window.onload = async () => {
-            try {
-                const [current, forecast] = await Promise.all([
-                    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${YIWU_COORDS.lat}&lon=${YIWU_COORDS.lng}&appid=eacbfc53b389b364ff36170551ca70a8&units=metric`),
-                    fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${YIWU_COORDS.lat}&lon=${YIWU_COORDS.lng}&appid=eacbfc53b389b364ff36170551ca70a8&units=metric`)
-                ]);
-                
-                updateDisplay(
-                    await current.json(),
-                    (await forecast.json()).list
-                );
-            } catch(error) {
-                console.error('数据加载失败');
-            }
-        };
-
-        function updateDisplay(currentData, forecastData) {
-            // 当前天气
-            document.querySelector('.icon').textContent = 
-                WEATHER_ICONS[currentData.weather.main] || '🌤️';
-            document.querySelector('.temp').textContent = 
-                `${Math.round(currentData.main.temp)}°`;
-
-            // 处理预报数据
-            const dailyData = {};
-            forecastData.forEach(item => {
-                const date = new Date(item.dt * 1000);
-                const dayKey = date.getDate();
-                
-                if (!dailyData[dayKey]) {
-                    dailyData[dayKey] = {
-                        min: item.main.temp,
-                        max: item.main.temp,
-                        icon: item.weather.main
-                    };
-                } else {
-                    dailyData[dayKey].min = Math.min(dailyData[dayKey].min, item.main.temp);
-                    dailyData[dayKey].max = Math.max(dailyData[dayKey].max, item.main.temp);
-                }
-            });
-
-            // 显示预报
-            document.getElementById('forecast').innerHTML = 
-                Object.values(dailyData)
-                    .slice(1, 6)
-                    .map(day => `
-                        <div class="forecast-item">
-                            <div class="forecast-icon">${WEATHER_ICONS[day.icon] || '🌤️'}</div>
-                            <div class="forecast-temp">${Math.round(day.min)}/${Math.round(day.max)}°</div>
-                        </div>
-                    `).join('');
+        // 保持原有JavaScript代码不变
+        function updateCounts() {
+            const now = new Date();
+            
+            const yearEnd = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+            const yearRemaining = Math.floor((yearEnd - now) / (1000 * 60 * 60 * 24));
+            
+            const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            const monthRemaining = Math.floor((nextMonth - now) / (1000 * 60 * 60 * 24));
+            
+            const today = now.getDay();
+            const weekRemaining = (today === 0) ? 0 : (7 - today);
+            
+            document.getElementById('year-remaining').textContent = yearRemaining;
+            document.getElementById('month-remaining').textContent = monthRemaining;
+            document.getElementById('week-remaining').textContent = weekRemaining;
         }
+
+        updateCounts();
+        setInterval(updateCounts, 24 * 60 * 60 * 1000);
     </script>
 </body>
 </html>
